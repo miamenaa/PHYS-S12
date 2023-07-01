@@ -107,9 +107,15 @@ p {font-size: 16px;}
 }
 
 /* Two image containers (use 25% for four, and 50% for two, etc) */
-.column {
+.column2 {
   float: left;
   width: 50%;
+  padding: 5px;
+}
+
+.column3 {
+  float: left;
+  width: 33%;
   padding: 5px;
 }
 
