@@ -1,0 +1,44 @@
+
+const int A1A = 3;  // define pin 3 for A-1A (speed)
+const int A1B = 4;  // define pin 4 for A-1B (direction)
+
+void setup() {
+  pinMode(A1A, OUTPUT);     // specify these pins as outputs
+  pinMode(A1B, OUTPUT);
+  digitalWrite(A1A, LOW);   // start with the motors off 
+  digitalWrite(A1B, LOW);
+  pinMode(3, OUTPUT);
+  pinMode(A0, OUTPUT);  //This will be GND for the potentiometer
+  pinMode(A4, OUTPUT);  //This will be 3.3V for the pot
+
+  digitalWrite(A0, LOW);
+  digitalWrite(A4, HIGH);
+}
+
+void loop() {
+  // start the motor 
+  digitalWrite(A1A, HIGH);   
+  digitalWrite(A1B, LOW);
+  delay(5000);              // allow the motor to run CW for 5 seconds
+
+  // stop the motor
+  digitalWrite(A1A, LOW);   // setting both pins LOW stops the motor
+  digitalWrite(A1B, LOW);
+  delay(0500);              // keep the motor off for .5 seconds
+
+  // start the motor in opposite direction
+  digitalWrite(A1A, LOW);  // A1A needs to be LOW to switch direction
+  digitalWrite(A1B, HIGH);  
+  delay(5000);              // allow the motor to run CCW for 5 seconds
+
+  // stop the motor
+  digitalWrite(A1A, LOW);   // setting both pins LOW stops the motor
+  digitalWrite(A1B, LOW);
+  delay(0500);   
+
+  int pot_value = analogRead(A2);   //pot wiper is on A2
+  int motor_speed = map(pot_value, 0, 1023, 255, 150); // map motor_level to pot_value so that zero corresponds to lowest speed
+  analogWrite(3, motor_speed);
+  delay(1);
+
+}
