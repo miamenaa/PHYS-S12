@@ -6,7 +6,7 @@ body {
   }
 
 p {font-size: 16px;}
-.margin {margin-bottom: 15px;}
+.margin {margin-bottom: 50px;}
 
 ol {font-size: 16px}
 .margin {margin-bottom: 15px}
@@ -132,7 +132,7 @@ ul {font-size: 16px}
   display: table;
 }
 
-.box {
+.box1 {
   border: 1px solid black;
   padding: 10px;
   position: relative;
