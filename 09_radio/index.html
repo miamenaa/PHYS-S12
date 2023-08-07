@@ -28,11 +28,386 @@
 
 <br>
 
-<p>This week we learned about connecting microcontrollers with WiFi and Radio. </p>
+<p>This week we learned about connecting microcontrollers with WiFi and Radio. I worked with Felipe and we decided to work on something for my project, which wasa the moving motors.</p>
 
 <br>
 
-##### <strong>Piezo Buzzer</strong>
+##### <strong>The Set-Up</strong>
+
+<br>
+
+<p>Overall, the set up was really just having the motors go through the bottom of the case. This is seen below in the image. To learn more about the case itself visit the <a href="https://miamenaa.github.io/PHYS-S12/finalproject.html">Final Project Page</a> page.</p>
+
+<br>
+
+##### <strong>Motor Code</strong>
+
+<br>
+
+<p>The Motor code consisted of setting up the class to move the motor. Overall, the final movement of the motor consisted of moving clockwise for 5 seconds, stopping for .5 seconds, moving counterclockwise for 5 seconds, and again stopping for .5 seconds.<p>
+
+<p>First, we defined the variables of the class</p>
+
+<br>
+
+<div class="box">
+<pre><code class="language-arduino">
+class Motor
+{
+  // Class Member Variables
+  // These are initialized at startup
+  int A1A;      // the number of the LED pin
+  int B1A;
+  long ForwardTime;     // milliseconds of on-time
+  long BackwardTime;    // milliseconds of off-time
+
+  int dir;
+
+  // These maintain the current state
+  unsigned long previousMillis;   // will store last time LED was updated
+  </code></pre> </div>
+
+<br>
+
+<p>Then a Flasher was set up...</p>
+
+  <div class="box">
+<pre><code class="language-arduino">
+// Constructor - creates a Flasher 
+  // and initializes the member variables and state
+  public:
+  Motor(int A1A, int A1B, long forward, long backward)
+  {
+    A1A = A1A;
+    B1A = A1B;
+    pinMode(A1A, OUTPUT);     
+    pinMode(B1A, OUTPUT); 
+    digitalWrite(A1A, LOW);   // start with the motors off 
+    digitalWrite(B1A, LOW);
+      
+    ForwardTime = forward;
+    BackwardTime = backward;
+    
+    previousMillis = 0;
+    dir = LOW;
+  }
+  </code></pre> </div>
+
+  <br>
+
+<p>Finally a void Move and Stop were set up to construct the movement of the motors...</p>
+
+<div class="box">
+<pre><code class="language-arduino">
+void Move()
+  {
+    
+    // check to see if it's time to change the state of the LED
+    unsigned long currentMillis = millis();
+
+    if((dir == HIGH) && (currentMillis - previousMillis >= ForwardTime)){
+      while(millis() - currentMillis < 100){
+        digitalWrite(A1A, LOW); // Set IA to HIGH to turn on the motor
+        digitalWrite(B1A, LOW);  // Set IB to LOW for motor control
+      }
+      Serial.println("ONE DIRECTION");
+      digitalWrite(A1A, HIGH); // Set IA to HIGH to turn on the motor
+      digitalWrite(B1A, HIGH);  // Set IB to LOW for motor control
+      dir = LOW;
+      previousMillis = currentMillis;
+    }
+    else if((dir == LOW) && (currentMillis - previousMillis >= BackwardTime)){
+      while(millis() - currentMillis < 100){
+        digitalWrite(A1A, LOW); // Set IA to HIGH to turn on the motor
+        digitalWrite(B1A, LOW);  // Set IB to LOW for motor control
+      }
+      Serial.println("OTHER DIRECTION");
+      digitalWrite(A1A, LOW); // Set IA to HIGH to turn on the motor
+      digitalWrite(B1A, HIGH);  // Set IB to LOW for motor control
+      dir = HIGH;
+      previousMillis = currentMillis;
+    }
+
+
+  }
+
+  void Stop(){
+    digitalWrite(A1A, LOW); // Set IA to HIGH to turn on the motor
+    digitalWrite(B1A, LOW);  // Set IB to LOW for motor control
+  }
+};
+
+
+Motor motor_l(D0, D1, 5000, 5000);
+Motor motor_r(D2, D3, 5000, 5000);
+
+unsigned long sendDataPrevMillis = 0;
+int count = 0;
+bool signupOK = false;
+  </code></pre> </div>
+
+  <br>
+
+##### <strong>Firebase Server Code</strong>
+
+<p>The first part of the code was setting up the Firbase Server and the Wifi aspect...</p>
+
+<br>
+
+<div class="box">
+<pre><code class="language-arduino">
+#include "WiFi.h"
+#include <FirebaseESP32.h>
+
+//Provide the token generation process info.
+#include "addons/TokenHelper.h"
+//Provide the RTDB payload printing info and other helper functions.
+#include "addons/RTDBHelper.h"
+
+// Insert your network credentials
+#define WIFI_SSID "MAKERSPACE"
+#define WIFI_PASSWORD "12345678"
+
+// Insert Firebase project API Key
+#define API_KEY "AIzaSyDY3Fb5JU7bWaBCIKiePlZVuqcmlSssZqA"
+
+// Insert RTDB URLefine the RTDB URL */
+#define DATABASE_URL "https://gcm-mena-default-rtdb.firebaseio.com/" 
+</code></pre> </div>
+
+<br>
+
+<p>After setting up the classes, the steup and loop functions were established which both fully connected the motors to the server and established the website to turn the "button" on and off.</p>
+
+<div class="box">
+<pre><code class="language-arduino">
+void setup(){
+  Serial.begin(115200);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED){
+    Serial.print(".");
+    delay(300);
+  }
+  Serial.println();
+  Serial.print("Connected with IP: ");
+  Serial.println(WiFi.localIP());
+  Serial.println();
+
+  /* Assign the api key (required) */
+  config.api_key = API_KEY;
+
+  /* Assign the RTDB URL (required) */
+  config.database_url = DATABASE_URL;
+
+  /* Sign up */
+  if (Firebase.signUp(&config, &auth, "", "")){
+    Serial.println("ok");
+    signupOK = true;
+  }
+  else{
+    Serial.printf("%s\n", config.signer.signupError.message.c_str());
+  }
+
+  /* Assign the callback function for the long running token generation task */
+  config.token_status_callback = tokenStatusCallback; //see addons/TokenHelper.h
+  
+  Firebase.begin(&config, &auth);
+  Firebase.reconnectWiFi(true);
+  Firebase.RTDB.setString(&fbdo, "/BUTTON_STATE", "OFF");
+}
+
+
+void loop(){
+  Firebase.RTDB.getString(&fbdo, "/BUTTON_STATE");                     // get status input from firebase
+  buttonState = fbdo.to<String>();
+  if(buttonState == "ON"){
+    Serial.println("ON");
+      motor_l.Move();
+      motor_r.Move();
+  }
+  else if (buttonState == "OFF"){
+    Serial.println("OFF");
+    motor_l.Stop();
+      motor_r.Stop();
+  }
+  
+}
+</code></pre> </div>
+
+<br>
+
+##### <strong>Final Code</strong>
+
+<br>
+
+<div class="box">
+<pre><code class="language-arduino">
+
+#include "WiFi.h"
+#include <FirebaseESP32.h>
+
+//Provide the token generation process info.
+#include "addons/TokenHelper.h"
+//Provide the RTDB payload printing info and other helper functions.
+#include "addons/RTDBHelper.h"
+
+// Insert your network credentials
+#define WIFI_SSID "MAKERSPACE"
+#define WIFI_PASSWORD "12345678"
+
+// Insert Firebase project API Key
+#define API_KEY "AIzaSyDY3Fb5JU7bWaBCIKiePlZVuqcmlSssZqA"
+
+// Insert RTDB URLefine the RTDB URL */
+#define DATABASE_URL "https://gcm-mena-default-rtdb.firebaseio.com/" 
+
+
+//Define Firebase Data object
+FirebaseData fbdo;
+
+FirebaseAuth auth;
+FirebaseConfig config;
+
+String buttonState;
+
+
+class Motor
+{
+  // Class Member Variables
+  // These are initialized at startup
+  int A1A;      // the number of the LED pin
+  int B1A;
+  long ForwardTime;     // milliseconds of on-time
+  long BackwardTime;    // milliseconds of off-time
+
+  int dir;
+
+  // These maintain the current state
+  unsigned long previousMillis;   // will store last time LED was updated
+
+  // Constructor - creates a Flasher 
+  // and initializes the member variables and state
+  public:
+  Motor(int A1A, int A1B, long forward, long backward)
+  {
+    A1A = A1A;
+    B1A = A1B;
+    pinMode(A1A, OUTPUT);     
+    pinMode(B1A, OUTPUT); 
+    digitalWrite(A1A, LOW);   // start with the motors off 
+    digitalWrite(B1A, LOW);
+      
+    ForwardTime = forward;
+    BackwardTime = backward;
+    
+    previousMillis = 0;
+    dir = LOW;
+  }
+
+  void Move()
+  {
+    
+    // check to see if it's time to change the state of the LED
+    unsigned long currentMillis = millis();
+
+    if((dir == HIGH) && (currentMillis - previousMillis >= ForwardTime)){
+      while(millis() - currentMillis < 100){
+        digitalWrite(A1A, LOW); // Set IA to HIGH to turn on the motor
+        digitalWrite(B1A, LOW);  // Set IB to LOW for motor control
+      }
+      Serial.println("ONE DIRECTION");
+      digitalWrite(A1A, HIGH); // Set IA to HIGH to turn on the motor
+      digitalWrite(B1A, HIGH);  // Set IB to LOW for motor control
+      dir = LOW;
+      previousMillis = currentMillis;
+    }
+    else if((dir == LOW) && (currentMillis - previousMillis >= BackwardTime)){
+      while(millis() - currentMillis < 100){
+        digitalWrite(A1A, LOW); // Set IA to HIGH to turn on the motor
+        digitalWrite(B1A, LOW);  // Set IB to LOW for motor control
+      }
+      Serial.println("OTHER DIRECTION");
+      digitalWrite(A1A, LOW); // Set IA to HIGH to turn on the motor
+      digitalWrite(B1A, HIGH);  // Set IB to LOW for motor control
+      dir = HIGH;
+      previousMillis = currentMillis;
+    }
+
+
+  }
+
+  void Stop(){
+    digitalWrite(A1A, LOW); // Set IA to HIGH to turn on the motor
+    digitalWrite(B1A, LOW);  // Set IB to LOW for motor control
+  }
+};
+
+
+Motor motor_l(D0, D1, 5000, 5000);
+Motor motor_r(D2, D3, 5000, 5000);
+
+unsigned long sendDataPrevMillis = 0;
+int count = 0;
+bool signupOK = false;
+
+void setup(){
+  Serial.begin(115200);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED){
+    Serial.print(".");
+    delay(300);
+  }
+  Serial.println();
+  Serial.print("Connected with IP: ");
+  Serial.println(WiFi.localIP());
+  Serial.println();
+
+  /* Assign the api key (required) */
+  config.api_key = API_KEY;
+
+  /* Assign the RTDB URL (required) */
+  config.database_url = DATABASE_URL;
+
+  /* Sign up */
+  if (Firebase.signUp(&config, &auth, "", "")){
+    Serial.println("ok");
+    signupOK = true;
+  }
+  else{
+    Serial.printf("%s\n", config.signer.signupError.message.c_str());
+  }
+
+  /* Assign the callback function for the long running token generation task */
+  config.token_status_callback = tokenStatusCallback; //see addons/TokenHelper.h
+  
+  Firebase.begin(&config, &auth);
+  Firebase.reconnectWiFi(true);
+  Firebase.RTDB.setString(&fbdo, "/BUTTON_STATE", "OFF");
+}
+
+
+void loop(){
+  Firebase.RTDB.getString(&fbdo, "/BUTTON_STATE");                     // get status input from firebase
+  buttonState = fbdo.to<String>();
+  if(buttonState == "ON"){
+    Serial.println("ON");
+      motor_l.Move();
+      motor_r.Move();
+  }
+  else if (buttonState == "OFF"){
+    Serial.println("OFF");
+    motor_l.Stop();
+      motor_r.Stop();
+  }
+  
+} 
+</code></pre> </div>
+
+
+
+<br>
 
 <center>[HOME](../index.html)</center>
 

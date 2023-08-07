@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<title>PS70: Intro to Digital Fabrication </title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="../style.css" rel="stylesheet">
+
+
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+  <div style="align-items: left; justify-content:left;" class="container-fluid">
+    <h3 class="nav-title"> PS70: Intro to Digital Fabrication</h3>
+    <div class="navbar-nav">
+      <h4></h4>
+      <h4><a class="nav-link" href="../index.html">Home</a></h4>
+      <h4><a class="nav-link" href="../about.html">About</a></h4>
+      <h4><a class="nav-link" href="../finalproject.html">Final Project</a></h4>
+    </div>
+  </div>
+</nav>
+
+<body>
+
+
+<xmp style="display:none;">
+
+<br> 
+
+#### The Process
+
+<br>
+
+<p>The final vision changed due to the lack of ultrasonic generators. Instead, a motor was used to move the water.<p>
+
+<br>
+
+<center><img src=""></center>
+
+<strong>Trying Snap-Fit</strong>
+
+ <p>For the 3D Assignment I choose to print something related to my final project, which was supposed to be the case. However, due to the long print time and uncertainity on water tightness and the snap-fit, I decided to just print a much smaller snap-fit box. This box allowed to get a better idea for how my case design would turn out and how far I can go with 3D, in regards to liquids (<a href="https://miamenaa.github.io/PHYS-S12/05_3D/index.html">Week 5: 3D Printing</a>).</p>
+
+<strong>3D Printing Case</strong>
+
+<br>
+
+<p>Overall, I had 3 versions of the print. Each bigger than the last.</p>
+
+<br>
+
+<strong>Case: Version 1</strong>
+
+<br>
+
+<p>The main issue with V1 was its lack of feasibility and functionality. I was missing spefifc and important holes. This was genuinely because the deign wasn't thought about enough, but after this print, I had a better idea about how to go about the process.</p>
+
+  <br>
+
+  <div class="row">
+  <div class="column2">
+    <center><img src="finished-coke-cold2.jpg" height="450"></center>
+  </div>
+  <div class="column2">
+    <center><img src="finished-coke-mold.jpg" height="450"></center>
+  </div>
+
+<br>
+
+<strong>Case: Version 2</strong>
+
+<p>V2 was much more functional with only a few changes needed. While it was much better, I did want to make the case more comfortabel for my glasses and the motor, so I added more depth to the top and bottom pieces. Furthermore, I forgot to mirror the second hole on the top for the second motor, which I fixed for V3.</p>
+
+<p>The bottom base had a length of 145mm, width of 45mm, and height of 60mm. The top base has a length of 137mm, width of 45mm, and depth of 30mm. The motor hole was 5.8mm, which effectively worked out. The wire hole was 10mm.</p>
+
+<strong>Case: Version 3</strong>
+
+<p>After much more thought on the design, I finally got the measurements down and this last version was perfect. There was a hole for wires on the bottom piece, two holes for motors oon the top piece, the top fit snug with the bottom and didn't move, and the motors and glasses fit comfortably. The dimensions follow the ones from the design seen below.</p>
+
+<br>
+
+<center><img src="top-snap-fit.png" height="100%" width="100%"></center>
+
+<br>
+
+<div class="row">
+<div class="column3">
+  <center><img src="top-snap-fit.png" height="100%" width="100%"></center>
+</div>
+<div class="column3">
+  <center><img src="front-snap-fit.png" height="100%" width="100%"></center>
+</div>
+<div class="column3">
+  <center><img src="full-snap-fit.png" height="100%" width="100%"></center>
+</div>
+
+<br>
+
+<strong>The Motors</strong>
+
+<p>I decided to use DC Motors to move the water. First, I soldered ground and power to both motors to insure the motors establishing an effective connection with the further away motor driver. Then, I used heat shrink to secure the freshly soldered wires and motor together.</p>
+
+<p>The motors were attached to the case and effectively fit through as seen below...</p>
+
+<strong>Motor Driver and XIAO ESP32C3</strong>
+
+<p>The L9110 Motor Driver was used whcih connected both motors to the XIAO. Using the L9110 was effective since I could control both speed and direction.</p>
+
+<p>Then, the motor driver was connected to the XIAO's ground, USB (5V), and pins 0-3.</p>
+
+<strong>Switch</strong>
+
+<p>I originally installed a switch. The on button would keep the loop going and once the switch turned off, so would the loop. A video of the switch working is below...</p>
+
+<strong>Firebase Server</strong>
+
+<p>While the switch did work, I knew I could do better. Therefore, I removed the switch and decided to work with the Firebase Server.</p>
+
+<p> The code for the movement of the motors was established and a Firebase Server was used to manually turn the machine ON and OFF online. This can be further seen in more detail on the <a href="https://miamenaa.github.io/PHYS-S12/09_radio/index.html">Week 9</a> page.</p>
+
+<center><h4><a class="nav-link" href="../final_RTDB.html">GCM: ON & OFF</a></h4></center>
+
+<br>
+
+<center>[HOME](../index.html)</center>
+
+</xmp>
+</body>
+
+<script src="../strapdown.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
+
+</html>
