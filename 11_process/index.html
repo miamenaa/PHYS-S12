@@ -33,15 +33,13 @@
 
 <br>
 
-<center><img src=""></center>
-
 <strong>Trying Snap-Fit</strong>
 
  <p>For the 3D Assignment I choose to print something related to my final project, which was supposed to be the case. However, due to the long print time and uncertainity on water tightness and the snap-fit, I decided to just print a much smaller snap-fit box. This box allowed to get a better idea for how my case design would turn out and how far I can go with 3D, in regards to liquids (<a href="https://miamenaa.github.io/PHYS-S12/05_3D/index.html">Week 5: 3D Printing</a>).</p>
 
-<strong>3D Printing Case</strong>
+ <br>
 
-<br>
+<strong>3D Printing Case</strong>
 
 <p>Overall, I had 3 versions of the print. Each bigger than the last.</p>
 
@@ -49,27 +47,31 @@
 
 <strong>Case: Version 1</strong>
 
-<br>
-
 <p>The main issue with V1 was its lack of feasibility and functionality. I was missing spefifc and important holes. This was genuinely because the deign wasn't thought about enough, but after this print, I had a better idea about how to go about the process.</p>
 
   <br>
 
   <div class="row">
   <div class="column2">
-    <center><img src="finished-coke-cold2.jpg" height="450"></center>
+    <center><img src="v1-top-nom.png" height="400"></center> 
   </div>
   <div class="column2">
-    <center><img src="finished-coke-mold.jpg" height="450"></center>
+    <center><img src="v1-bot-nom.png" height="400"></center>
   </div>
 
 <br>
 
 <strong>Case: Version 2</strong>
 
-<p>V2 was much more functional with only a few changes needed. While it was much better, I did want to make the case more comfortabel for my glasses and the motor, so I added more depth to the top and bottom pieces. Furthermore, I forgot to mirror the second hole on the top for the second motor, which I fixed for V3.</p>
+<p>V2 was much more functional with only a few changes needed. While it was much better, I did want to make the case more comfortabel for my glasses and the motor, so I added more depth to the top and bottom pieces. Furthermore, I forgot to mirror the second hole on the top for the second motor, which I fixed for V3. Such errors are seen in the picture below.</p>
 
 <p>The bottom base had a length of 145mm, width of 45mm, and height of 60mm. The top base has a length of 137mm, width of 45mm, and depth of 30mm. The motor hole was 5.8mm, which effectively worked out. The wire hole was 10mm.</p>
+
+<br>
+
+<center><img src="v2pic.PNG" height="500"></center> 
+
+<br>
 
 <strong>Case: Version 3</strong>
 
@@ -77,19 +79,16 @@
 
 <br>
 
-<center><img src="top-snap-fit.png" height="100%" width="100%"></center>
+<center><img src="v3sketch.jpg" height="400" ></center> 
 
 <br>
 
 <div class="row">
-<div class="column3">
-  <center><img src="top-snap-fit.png" height="100%" width="100%"></center>
+<div class="column2">
+  <center><img src="v3-top-m.png" height="400"></center> 
 </div>
-<div class="column3">
-  <center><img src="front-snap-fit.png" height="100%" width="100%"></center>
-</div>
-<div class="column3">
-  <center><img src="full-snap-fit.png" height="100%" width="100%"></center>
+<div class="column2">
+  <center><img src="v3-bot-m.png" height="400"></center>
 </div>
 
 <br>
@@ -100,15 +99,34 @@
 
 <p>The motors were attached to the case and effectively fit through as seen below...</p>
 
+<br>
+
+<center><img src="motor-case.PNG" height="550"></center> 
+
+<br>
+
 <strong>Motor Driver and XIAO ESP32C3</strong>
 
 <p>The L9110 Motor Driver was used whcih connected both motors to the XIAO. Using the L9110 was effective since I could control both speed and direction.</p>
 
 <p>Then, the motor driver was connected to the XIAO's ground, USB (5V), and pins 0-3.</p>
 
+<br>
+
+<center><img src="l9110-pic.jpg" height="550"></center>
+
+<br>
+
 <strong>Switch</strong>
 
 <p>I originally installed a switch. The on button would keep the loop going and once the switch turned off, so would the loop. A video of the switch working is below...</p>
+
+<br>
+
+<center><video width="350" height="500" controls>
+  <source src="switch-vid.mp4" type="video/mp4"></video></center>
+
+<br>
 
 <strong>Firebase Server</strong>
 
