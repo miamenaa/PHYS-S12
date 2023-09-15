@@ -181,6 +181,32 @@ ul {font-size: 16px}
   grid-column: 9 / 9;
 }
 
+a:link, a:visited {
+  background-color:darkgray;
+  color: white;
+  padding: 25px 45px;
+  text-align: center; 
+  text-decoration: none;
+  display: inline-block;
+}
+
+a:hover, a:active {
+  background-color: #00B6FF;
+  transform: translateY(-10px);
+}
+
+.btn {
+    /*
+      All of the base styles have
+      moved to the “CSS” tab above.
+    */
+    transition: transform 250ms;
+  }
+  
+  .btn:hover {
+    transform: translateY(-10px);
+  }
+
 <!DOCTYPE html>
 <html>
 <head>
